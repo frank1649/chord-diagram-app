@@ -17,7 +17,7 @@
         </q-btn>
 
         <q-toolbar-title>
-          AS Chord Chart App
+          AS Chord Diagram App
           <div slot="subtitle">Running on Quasar v{{ $q.version }}</div>
         </q-toolbar-title>
       </q-toolbar>
@@ -35,7 +35,7 @@
         <q-list-header>Menu</q-list-header>
         <q-item to="/">
           <q-item-side icon="bar_chart" />
-          <q-item-main label="Chord Chart" sublabel="The chart Jacob is expecting" />
+          <q-item-main label="Chord Diagram" sublabel="A circular layout of the traffic data" />
         </q-item>
         <q-item to="/As-List">
           <q-item-side icon="list" />

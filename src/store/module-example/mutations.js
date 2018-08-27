@@ -10,7 +10,7 @@ export const configName = (state, payload) => {
   let asNumber = payload.asNumber
   let newName = payload.newName
 
-  // Find the as that matches the as number in asList
+  // Find the AS that matches the AS number in asList.
   let as = asList.find(as => as.number === asNumber)
 
   if (as) {

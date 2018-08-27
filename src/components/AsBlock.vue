@@ -13,7 +13,6 @@
         v-model="name"
         :float-label="asName"
         placeholder="Please enter AS name"
-        width="200px"
       />
       <q-btn
         label="Submit"
