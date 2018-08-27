@@ -1,12 +1,12 @@
 <template>
-  <div class="q-ma-xl">
-    <p>AS List</p>
+  <q-page class="q-ma-xl">
+    <h3>AS List</h3>
     <as-block
       v-for="as in asList"
       :as="as"
       :key="as.number"
     />
-  </div>
+  </q-page>
 </template>
 
 <style lang="stylus">
@@ -16,7 +16,7 @@
 import AsBlock from '../components/AsBlock.vue'
 
 export default {
-  name: 'AsList',
+  name: 'AsListPage',
   data () {
     return {
       asList: this.$store.state.example.asList
