@@ -29,7 +29,7 @@ Skill Set
 - Qusar ---- 2 days > 1
     - A page to display and configure the mapping between the AS names and numbers
      - Note that the configuration shall be syncronized between different page in real time
-- d3.js ---- 5 days
+- d3.js ---- 5 days > 3
     - A page to display the traffic between ASes via Chord chart
 - feathers ---- 5 days
     - Maintain one traffic snapshot where each record is an AS path, and byte number
