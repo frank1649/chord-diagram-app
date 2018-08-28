@@ -43,7 +43,7 @@ export default {
   },
   methods: {
     configName () {
-      this.$store.commit('example/configName', {
+      this.$store.commit('as/configName', {
         asNumber: this.as.number,
         newName: this.name
       })
