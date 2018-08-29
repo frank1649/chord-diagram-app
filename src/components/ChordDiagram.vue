@@ -114,30 +114,49 @@ export default {
         .data((chords) => { return chords.groups })
         .enter().append('g')
 
-      group.append('path')
+      let arcPath = group.append('path')
         .style('fill', (d) => { return color(d.index) })
         .style('stroke', (d) => { return d3.rgb(color(d.index)).darker() })
         .attr('d', arc)
 
-      let groupTick = group.selectAll('.group-tick')
-        .data((d) => { return that.groupTicks(d, 1e3) })
-        .enter().append('g')
-        .attr('class', 'group-tick')
-        .attr('transform', (d) => { return `rotate(${(d.angle * 180 / Math.PI - 90)}) translate(${outerRadius}, 0)` })
+      // TODO: Center AS labels
+      // https://css-tricks.com/centering-percentage-widthheight-elements/
+      let asLabel = group.append('g')
+        .attr('class', 'as-label')
+        .datum((d) => { return that.asLabels(d, d.index) })
+        .attr('transform', (d) => { return `rotate(${(d.angle * 180 / Math.PI - 90)}) translate(${outerRadius + 25}, -15)` })
 
-      groupTick.append('line')
-        .attr('x2', 6)
-
-      groupTick
-        .filter((d) => { return d.value % 5e3 === 0 })
+      asLabel.append('g')
+        .attr('class', 'as-number')
         .append('text')
-        .attr('x', 8)
-        .attr('dy', '.35em')
-        .attr('transform', (d) => { return d.angle > Math.PI ? 'rotate(180) translate(-16)' : null })
-        .style('text-anchor', (d) => { return d.angle > Math.PI ? 'end' : null })
-        .text((d) => { return formatValue(d.value) })
+        .attr('transform', 'rotate(90)')
+        .text((d) => { return d.asNum })
 
-      g.append('g')
+      asLabel.append('g')
+        .attr('class', 'as-name')
+        .append('text')
+        .attr('transform', 'rotate(90) translate(0, 15)')
+        .text((d) => { return d.asName })
+
+      // let groupTick = group.selectAll('.group-tick')
+      //   .data((d) => { return that.groupTicks(d, 1e3) })
+      //   .enter().append('g')
+      //   .attr('class', 'group-tick')
+      //   .attr('transform', (d) => { return `rotate(${(d.angle * 180 / Math.PI - 90)}) translate(${outerRadius}, 0)` })
+      //
+      // groupTick.append('line')
+      //   .attr('x2', 6)
+      //
+      // groupTick
+      //   .filter((d) => { return d.value % 5e3 === 0 })
+      //   .append('text')
+      //   .attr('x', 8)
+      //   .attr('dy', '.35em')
+      //   .attr('transform', (d) => { return d.angle > Math.PI ? 'rotate(180) translate(-16)' : null })
+      //   .style('text-anchor', (d) => { return d.angle > Math.PI ? 'end' : null })
+      //   .text((d) => { return formatValue(d.value) })
+
+      let ribbonPath = g.append('g')
         .attr('class', 'ribbons')
         .selectAll('path')
         .data((chords) => { return chords })
@@ -146,16 +165,53 @@ export default {
         .style('fill', (d) => { return color(d.target.index) })
         .style('stroke', (d) => { return d3.rgb(color(d.target.index)).darker() })
     },
-    // Returns an array of tick angles and values for a given group and step.
+    // Returns an array of tick angles and values for a given group and step
     groupTicks (d, step) {
+      // Calculate angle per value increment
       let k = (d.endAngle - d.startAngle) / d.value
-      return d3.range(0, d.value, step).map((value) => {
-        return {value: value, angle: value * k + d.startAngle}
+
+      let range = d3.range(0, d.value, step)
+
+      return range.map((value) => {
+        return {
+          value: value,
+          angle: value * k + d.startAngle
+        }
       })
+    },
+    // Return the AS info and mid-point's angle of each group
+    asLabels (d, i) {
+      let k = (d.endAngle - d.startAngle) / d.value
+      let midPoint
+
+      if (d.value % 2 === 0) {
+        midPoint = d.value / 2 * k + d.startAngle
+      } else {
+        midPoint = (d.value + 1) / 2 * k + d.startAngle
+      }
+
+      return {
+        asNum: this.asList[i].number,
+        asName: this.asList[i].name,
+        angle: midPoint
+      }
+    },
+    // TODO: Legend
+    legend () {
+      // const asList = this.$store.state.as.asList
+      // d3.select('#legend')
+      //   .attr('width', 200)
+      //   .attr('height', 400)
+      //   .data(asList.name)
+      //   .enter()
+      //   .append('div')
+      //   .text(asList.name)
+      // let g = svg.append('g')
     }
   },
   mounted () {
     this.render()
+    this.legend()
   },
   watch: {
     width () {
