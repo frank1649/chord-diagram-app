@@ -3,7 +3,8 @@
     <svg
       id="12345"
       :width="width"
-      :height="height"/>
+      :height="height"
+    />
   </div>
 </template>
 
@@ -24,13 +25,11 @@ import * as d3 from 'd3'
 
 export default {
   name: 'ChordDiagram',
-  // Chord diagram settings.
+  // Diagram settings
   data () {
     return {
-      // Formating numbers for human consumption.
       // https://github.com/d3/d3-format#locale_formatPrefix
       formatValue: d3.formatPrefix(',.0', 1e3),
-      // The outter part of the diagram composed by arcs.
       chord: d3.chord()
         .padAngle(0.05)
         .sortSubgroups(d3.descending)
@@ -42,8 +41,8 @@ export default {
       //   .range(['#9ecae1', '#1f77b4', '#756bb1', '#7f7f7f', '#c7c7c7'])
     }
   },
-  // TODO: Some props must be required
-  // Properties used to provide user interactive operations.
+  // Properties used to provide user interactive operations
+  // TODO: Some props should be required
   props: {
     id: Number,
     // buckeType: Date,
@@ -52,13 +51,16 @@ export default {
     // singleColor: Boolean,
     width: Number,
     height: Number,
-    // The input data.
     series: Array,
-    // Options of the diagram.
+    asList: Array,
+    // TODO: Option settings
     options: {
+      // tick: Boolean,
+      label: Boolean,
+      legend: Boolean
     }
   },
-  // Chord diagram components.
+  // Components based on width and height
   computed: {
     outerRadius () {
       return Math.min(this.width, this.height) * 0.5 - 40
@@ -77,34 +79,33 @@ export default {
     }
   },
   methods: {
-    // Draw the chord diagram.
+    // Draw the diagram
     render () {
       let that = this
       let matrix = this.series
+      // const formatValue = this.formatValue
 
-      // SVG selection and diagrma size settings.
+      // Select SVG and set dimentions
       let svg = d3.select(`[id="${this.id}"]`),
         width = this.width,
         height = this.height,
         outerRadius = this.outerRadius
 
-      const formatValue = this.formatValue
-
-      // Chord diagram components.
+      // Chord diagram components
       const chord = this.chord
       let arc = this.arc
       let ribbon = this.ribbon
       const color = this.color
 
-      // Remove previous SVG element if presented.
-      if (d3.select('g')) {
-        d3.select('g').remove()
+      // Remove old diagram
+      if (d3.select(`[id="${this.id}"] g`)) {
+        d3.select(`[id="${this.id}"] g`).remove()
       }
 
       let g = svg.append('g')
-        // Center the diagram in g.
+        // Center the diagram
         .attr('transform', `translate(${width / 2}, ${height / 2})`)
-        // Append chord (containing the data) to g.
+        // Insert data
         .datum(chord(matrix))
 
       let group = g.append('g')

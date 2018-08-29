@@ -15,6 +15,7 @@
         placeholder="Please enter AS name"
       />
       <q-btn
+        class="button"
         label="Submit"
         color="blue-9"
         @click="configName"
@@ -24,6 +25,15 @@
 </template>
 
 <style lang="stylus">
+  .q-field-label-inner
+    font-size: 20px
+
+  .input
+    width: 85%
+
+  /* TODO: Button reposition. */
+  .button
+    display: inline
 
 </style>
 

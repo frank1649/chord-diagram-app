@@ -10,7 +10,8 @@
         v-model="inputHeight"
       />
       <q-btn
-        label="Set Attribute"
+        class="button"
+        label="Resize Diagram"
         color="blue-9"
         @click="updateSize"
       />
@@ -21,6 +22,10 @@
 <style lang="stylus">
   .toolBox
     padding: 20px
+    width: 640px
+
+  .button
+    margin-top: 20px
 </style>
 
 <script>
@@ -29,14 +34,14 @@ export default {
   props: ['size'],
   data () {
     return {
-      // Set the initial value to props' value.
-      // NOTE: Directly change the props is agaisnt the design pattern.
+      // Set the initial value to props' valu
+      // NOTE: Directly change the props is agaisnt the design pattern
       inputWidth: this.size.width,
       inputHeight: this.size.height
     }
   },
   methods: {
-    // Emit the new size in Int to parent.
+    // Emit the new size in Int to parent
     updateSize () {
       let size = {
         width: parseInt(this.inputWidth),

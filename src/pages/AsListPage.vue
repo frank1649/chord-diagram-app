@@ -19,7 +19,7 @@ export default {
   name: 'AsListPage',
   data () {
     return {
-      asList: this.$store.state.example.asList
+      asList: this.$store.state.as.asList
     }
   },
   components: {
