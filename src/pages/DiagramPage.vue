@@ -13,6 +13,7 @@
       class="center"
       :size.sync="size"
     />
+    <div id="g-tooltip" style="position: absolute; z-index: 99999; background-color: rgba(255, 255, 255, 0.9); border: 1px solid steelblue; padding: 0.25rem 0.5rem; border-radius: 10px"/>
   </q-page>
 </template>
 

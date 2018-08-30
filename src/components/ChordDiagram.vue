@@ -172,6 +172,74 @@ export default {
         .attr('d', ribbon)
         .style('fill', d => { return color(d.source.index) })
         .style('stroke', d => { return d3.rgb(color(d.source.index)).darker() })
+
+      let tooltip = d3.select('#g-tooltip')
+
+      // Show tooltip when mouseover ribbons
+      ribbonPath.on('mouseover', (d) => {
+        // console.log(d)
+
+        let srcNode = this.nodeProps(d, 'src')
+        let trgNode = this.nodeProps(d, 'trg')
+        let table = tooltip.append('table')
+        let tbody = table.append('tbody')
+
+        // Tooltip formatted data
+        d = [
+          [srcNode, ' => ', trgNode],
+          ['bps: ', srcNode.value],
+          [trgNode, ' => ', srcNode],
+          ['bps: ', trgNode.value]
+        ]
+
+        // Select where to insert data inside table body
+        tbody.selectAll('tr')
+          // Join data and iterate over the data array
+          .data(d)
+          // Append the missing table rows according to data
+          .enter().append('tr')
+          // Select where to insert data inside the table row
+          .selectAll('span')
+          // Join data of table row and iterate over the array
+          .data(d => { return d })
+          .enter().append('span')
+          .html(d => {
+            if (d === ' => ') {
+              return ' => '
+            } else if (d === 'bps: ') {
+              return 'bps: '
+            } else if (d.label) {
+              return d.label
+            } else {
+              return d
+            }
+          })
+          .style('color', (d) => {
+            console.log(d)
+            if (d.color) {
+              return `${d3.rgb(d.color).darker()}`
+            } else {
+              return null
+            }
+          })
+          .style('font-weight', 'bold')
+
+        // TODO: Move selected ribbon to top and blur others
+
+        tooltip.style('display', 'inline-block')
+      })
+        .on('mousemove', () => {
+          return tooltip.style('top', `${event.clientY - 90}px`).style('left', `${event.clientX - 340}px`)
+        })
+        .on('mouseout', () => {
+          d3.select('#g-tooltip *').remove()
+          return tooltip.style('display', 'none')
+        })
+
+      // TODO: I/O total tooltip
+      // arcPath.on('mouseover', () => { return tooltip.style('visibility', 'visible') })
+      //   .on('mousemove', () => { return tooltip.style('top', `${event.pageY}px`).style('left', `${event.pageX + 10}px`) })
+      //   .on('mouseout', () => { return tooltip.style('visibility', 'hidden') })
     },
     // Returns an array of tick angles and values for a given group and step
     groupTicks (d, step) {
@@ -203,6 +271,25 @@ export default {
         asName: this.asList[i].name,
         angle: midPoint
       }
+    },
+    // Prepare the properties used in the tooltip
+    nodeProps (d, type) {
+      let props = {}
+      // Group index
+      let srcIndex = d.source.index
+      let trgIndex = d.target.index
+
+      if (type === 'src') {
+        props.label = this.asList[srcIndex].number
+        props.color = this.color(srcIndex)
+        props.value = d.source.value
+      } else {
+        props.label = this.asList[trgIndex].number
+        props.color = this.color(trgIndex)
+        props.value = d.target.value
+      }
+
+      return props
     },
     // TODO: Legend
     legend () {
