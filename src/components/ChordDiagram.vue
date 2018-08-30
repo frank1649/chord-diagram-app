@@ -18,6 +18,12 @@
   .ribbons
     fill-opacity: 0.67
 
+  .as-number
+    font-size: 20px
+
+  #legend
+    display: inline
+
 </style>
 
 <script>
@@ -111,7 +117,7 @@ export default {
       let group = g.append('g')
         .attr('class', 'groups')
         .selectAll('g')
-        .data((chords) => { return chords.groups })
+        .data(chords => { return chords.groups })
         .enter().append('g')
 
       let arcPath = group.append('path')
@@ -123,20 +129,22 @@ export default {
       // https://css-tricks.com/centering-percentage-widthheight-elements/
       let asLabel = group.append('g')
         .attr('class', 'as-label')
-        .datum((d) => { return that.asLabels(d, d.index) })
-        .attr('transform', (d) => { return `rotate(${(d.angle * 180 / Math.PI - 90)}) translate(${outerRadius + 25}, -15)` })
+        .datum(d => { return that.asLabels(d, d.index) })
+        .attr('transform', d => {
+          return `rotate(${(d.angle * 180 / Math.PI - 90)}) translate(${outerRadius + 25}, -15)`
+        })
 
       asLabel.append('g')
         .attr('class', 'as-number')
         .append('text')
         .attr('transform', 'rotate(90)')
-        .text((d) => { return d.asNum })
+        .text(d => { return d.asNum })
 
       asLabel.append('g')
         .attr('class', 'as-name')
         .append('text')
         .attr('transform', 'rotate(90) translate(0, 15)')
-        .text((d) => { return d.asName })
+        .text(d => { return d.asName })
 
       // let groupTick = group.selectAll('.group-tick')
       //   .data((d) => { return that.groupTicks(d, 1e3) })
@@ -162,8 +170,8 @@ export default {
         .data((chords) => { return chords })
         .enter().append('path')
         .attr('d', ribbon)
-        .style('fill', (d) => { return color(d.target.index) })
-        .style('stroke', (d) => { return d3.rgb(color(d.target.index)).darker() })
+        .style('fill', d => { return color(d.source.index) })
+        .style('stroke', d => { return d3.rgb(color(d.source.index)).darker() })
     },
     // Returns an array of tick angles and values for a given group and step
     groupTicks (d, step) {
